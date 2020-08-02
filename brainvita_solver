@@ -1,0 +1,195 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 25 21:35:40 2020
+
+@author: kshitiz
+"""
+mrb = [[0, 0], [1, 0], [-2, 0], [-1, -1], [0, -1], [1, -1], [1, 1], [1, -2]]
+
+def puzzle_input():
+    
+    print ("Input the position of marbles in each line.", "\n")
+    print ("Format: x y")
+    print("where, x denotes the x-coordinate and y denotes the y-coordinate")
+    print("(Assuming centre to be origin)", "\n")
+    # print ("where, x denotes the x-coordinate and y denotes the y-coordinate")
+    print ("When all entries are done, type 0 and press enter")
+    
+    m = list(map(int, input().split()))
+    marbles = []
+    while m!=[0]:
+        marbles.append(m)
+        m = list(map(int, input().split()))
+        
+    
+    return marbles
+
+def draw_puzzle (marbles):
+    
+    lines = []
+    for i in range(3):
+        line = [' ' for _ in range(3)] + ['.' for _ in range(3)] + [' ' for _ in range(3)]
+        lines.append(line)
+    for i in range(3):
+        line = ['.' for _ in range(9)]
+        lines.append(line)
+    for i in range(3):
+        line = [' ' for _ in range(3)] + ['.' for _ in range(3)] + [' ' for _ in range(3)]
+        lines.append(line)
+    
+    for m in marbles:
+        # print(m)
+        [xi, yi] = m
+        lines[4-yi][4+xi] = 'o'
+    
+    for i in range(1, 8):
+        s = " ".join(lines[i])
+        print (s[1:-1])
+
+    if len(marbles)==1:
+        if marbles[0]==[0, 0]:
+            return 'SOLVED'
+        else:
+            return 'UNSOLVED'
+    
+    else:
+        return 'UNSOLVED'
+    
+def find_valid_moves (marbles):
+    
+    moves = [] 
+    # each move is of type [move, jump, place]
+    
+    for i in marbles:
+        
+        [x, y] = i
+        
+        # along x direction
+        if y<=-2 or y>=2:
+            if x==-1:
+                if [0, y] in marbles:
+                    if [1, y] not in marbles:
+                        moves.append ([[-1, y], [0, y], [1, y]])
+            elif x==1:
+                if [0, y] in marbles:
+                    if [-1, y] not in marbles:
+                        moves.append ([[1, y], [0, y], [-1, y]])
+        
+        else:
+            if x>=-2:
+                if [x-1, y] in marbles:
+                    if [x-2, y] not in marbles:
+                        moves.append ([[x, y], [x-1, y], [x-2, y]])
+            if x<=2:
+                if [x+1, y] in marbles:
+                    if [x+2, y] not in marbles:
+                        moves.append ([[x, y], [x+1, y], [x+2, y]])
+            
+        # along y direction
+        if x<=-2 or x>=2:
+            if y==-1:
+                if [x, 0] in marbles:
+                    if [x, 1] not in marbles:
+                        moves.append ([[x, -1], [x, 0], [x, 1]])
+            elif y==1:
+                if [x, 0] in marbles:
+                    if [x, -1] not in marbles:
+                        moves.append ([[x, 1], [x, 0], [x, -1]])
+        else:
+            if y>=-2:
+                if [x, y-1] in marbles:
+                    if [x, y-2] not in marbles:
+                        moves.append ([[x, y], [x, y-1], [x, y-2]])
+            if y<=2:
+                if [x, y+1] in marbles:
+                    if [x, y+2] not in marbles:
+                        moves.append ([[x, y], [x, y+1], [x, y+2]])
+        
+    return moves
+
+def status(marbles):
+    if len(marbles)==1:
+        if marbles[0]==[0, 0]:
+            return 'SOLVED'
+        else:
+            return 'UNSOLVED'
+    else:
+        return 'UNSOLVED'
+
+def solve_puzzle (pre, marbles, soln):
+    
+    # print('m', marbles)
+    # draw_puzzle(marbles)r
+    
+    if status(marbles)=='SOLVED':
+        # draw_puzzle(marbles)
+        # print(pre)
+        soln.append(pre)
+        # return 1
+    
+    moves = find_valid_moves(marbles)
+    if len(moves)==0:
+        pre=[]
+    
+    # print(moves)
+    for m in moves:
+        # print('mi', m)
+        temp = marbles.copy()
+        temp.remove(m[0])
+        temp.remove(m[1])
+        temp.append(m[2])
+        # print(solve_puzzle(temp))
+        # print(temp)
+        solve_puzzle(pre+[m], temp, soln)
+        # print (cont, left_moves)
+        
+        # if cont>=0:
+            # return 1, [m]+left_moves
+        
+        # elif cont==-1:
+            # continue
+    return 1
+    
+def solution():
+    
+    marbles = puzzle_input()
+    
+    soln = []
+    
+    solve_puzzle([], marbles, soln)
+    
+    print ("I have found", len(soln), "different solution(s).")
+    
+    print ("How many would you like to see? [enter number]")
+    
+    n_sol = int(input())
+    
+    for i in range(n_sol):
+        
+        print('-'*18)
+        print('Solution', i+1)
+        print('-'*18)
+        
+        marbles_set = marbles.copy()
+        
+        draw_puzzle(marbles_set)
+        
+        for step in soln[i]:
+            
+            marbles_set.remove (step[0])
+            marbles_set.remove (step[1])
+            marbles_set.append (step[2])
+            
+            print('-'*18)
+            
+            draw_puzzle(marbles_set)
+        
+        print('-'*18)
+        print('-'*18)
+        print('')
+        
+    return "SOLVED"
+
+solution()
+    
