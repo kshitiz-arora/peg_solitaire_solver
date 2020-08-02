@@ -5,7 +5,9 @@ Created on Thu Jun 25 21:35:40 2020
 
 @author: kshitiz
 """
-mrb = [[0, 0], [1, 0], [-2, 0], [-1, -1], [0, -1], [1, -1], [1, 1], [1, -2]]
+
+# Funtion 1
+# Takes input form the user
 
 def puzzle_input():
     
@@ -22,9 +24,13 @@ def puzzle_input():
         marbles.append(m)
         m = list(map(int, input().split()))
         
-    
     return marbles
 
+
+
+# Function 2
+# Prints 'the position of marbles on python ide' and 'solution status'
+# Future aim: build a web app for this program
 def draw_puzzle (marbles):
     
     lines = []
@@ -47,7 +53,7 @@ def draw_puzzle (marbles):
         s = " ".join(lines[i])
         print (s[1:-1])
 
-    if len(marbles)==1:
+    if len(marbles)==1:possible 
         if marbles[0]==[0, 0]:
             return 'SOLVED'
         else:
@@ -55,7 +61,14 @@ def draw_puzzle (marbles):
     
     else:
         return 'UNSOLVED'
+
     
+
+    
+# Function 3
+# The main part of code starts here
+# It finds all the possible moves that can be made on board
+# You can look for the rules at wiki page
 def find_valid_moves (marbles):
     
     moves = [] 
@@ -108,6 +121,9 @@ def find_valid_moves (marbles):
         
     return moves
 
+
+# Function 4
+# This just tells whether the game is solved or not
 def status(marbles):
     if len(marbles)==1:
         if marbles[0]==[0, 0]:
@@ -117,47 +133,48 @@ def status(marbles):
     else:
         return 'UNSOLVED'
 
+
+    
+# Function 5
+# This is the function that works on solving the question
+    # It uses 'recursion'
+# It finds all possible solutions for a particular game
+# Input values-
+    # pre : list of all moves 
+    # marbles : stores the current position of marbles on board
+    # soln : list of all possible solutions
 def solve_puzzle (pre, marbles, soln):
     
-    # print('m', marbles)
-    # draw_puzzle(marbles)r
-    
     if status(marbles)=='SOLVED':
-        # draw_puzzle(marbles)
-        # print(pre)
-        soln.append(pre)
-        # return 1
+        soln.append(pre) # if solved, append the sequence to 'soln'
     
     moves = find_valid_moves(marbles)
     if len(moves)==0:
         pre=[]
     
-    # print(moves)
     for m in moves:
-        # print('mi', m)
+
         temp = marbles.copy()
         temp.remove(m[0])
         temp.remove(m[1])
         temp.append(m[2])
-        # print(solve_puzzle(temp))
-        # print(temp)
+
         solve_puzzle(pre+[m], temp, soln)
-        # print (cont, left_moves)
         
-        # if cont>=0:
-            # return 1, [m]+left_moves
-        
-        # elif cont==-1:
-            # continue
     return 1
     
+    
+    
+# Function 6
+# Driver function of code
+# It concatenates above functions so that they work as desired
 def solution():
     
     marbles = puzzle_input()
     
     soln = []
     
-    solve_puzzle([], marbles, soln)
+    solve_puzzle([], marbles, soln) # 'soln' now contains all possible sequence of steps
     
     print ("I have found", len(soln), "different solution(s).")
     
@@ -191,5 +208,5 @@ def solution():
         
     return "SOLVED"
 
-solution()
+# solution()
     
