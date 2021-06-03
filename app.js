@@ -1,8 +1,11 @@
 // HTML Elements
 const cellDivs = document.querySelectorAll('.game-cell');
+const marbleDivs = document.querySelectorAll('.marble');
+
 
 // game variables
 let gameIsLive = true;
+let moves = [];
 
 // event handlers
 const handleReset = () => {
@@ -16,15 +19,20 @@ const handleCellClick = (e) => {
         return;
     }
     const classList = e.target.classList;
-    if (classList.length == 2 && classList[2] == 'active') {
-        classList.add('selected');
-    }
+    classList.add('from');
+
+    
+    
 }
 
 // event listeners 
 // for (const cellDiv of cellDivs) {
 //     cellDiv.addEventListener('click', handleCellClick);
 // }
-for (const cellDiv of cellDivs) {
-    cellDiv.addEventListener('click', handleCellClick);
+// for (const cellDiv of cellDivs) {
+//     cellDiv.addEventListener('click', handleCellClick);
+// }
+
+for (const marbleDiv of marbleDivs) {
+    marbleDiv.addEventListener('click', handleCellClick);
 }
