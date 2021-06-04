@@ -46,8 +46,8 @@ body {
 
 .marble {
     /* background: black; */
-    background: radial-gradient(circle at 35% 35%, #dfabab, #000000);;
     border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #dfabab, #000000);;
     display: flex;
     justify-content: center;
     align-items: center;
